@@ -25,6 +25,7 @@ These lines (starting with “@HD”) contain global metadata about the file, su
 
 Sequence (SQ) Lines:
 Each SQ line defines a reference sequence with its name, full length, and additional metadata. This should repeat in every  `.interval_list` file like the HD lines with all the chromosomes. I just pulled this one as an example.
+
 `@SQ     SN:chr21        LN:46709983     M5:974dc7aec0b755b19f031418fdedf293     AS:38`   `UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta     SP:Homo sapiens`
 
 Interval (Alignment) Line:
