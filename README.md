@@ -9,7 +9,7 @@ Repository for the scripts related to the All of Us dataset v8 normalization and
    -Dockerfile (optional if you need to create your own image)
    -AoU_annotations.ipynb
 
-BIG NOTE: The files used for annotating are all available though ensembl VEP download: https://useast.ensembl.org/info/docs/tools/vep/script/vep_plugins.html
+BIG NOTE: The files (plugins) used for annotating are all available though ensembl VEP download: https://useast.ensembl.org/info/docs/tools/vep/script/vep_plugins.html
 
 LOFTEE is the only third party plugin with all files necessary here:
 https://github.com/konradjk/loftee/tree/grch38
