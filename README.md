@@ -15,7 +15,7 @@ LOFTEE is the only third party plugin with all files necessary here:
 https://github.com/konradjk/loftee/tree/grch38
 
 
-# General information about normalization and annotation
+# General information about normalization and annotation set up
 Below is the pathway to view and use interval vcf chromosome files. These files use the UCSC BED file to list the chromosomes and positions
 
 gsutil -u $GOOGLE_PROJECT ls gs://fc-aou-datasets-controlled/v8/wgs/short_read/snpindel/exome/vcf/
