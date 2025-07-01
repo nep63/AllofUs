@@ -1,5 +1,5 @@
 # AllofUs
-Repository for the scripts related to the All of Us dataset v8 normalization and annoataions for exome datasets chromosomes 1-22. All steps are performed on the All of US Analysis Workbench: https://workbench.researchallofus.org/ 
+Repository for the scripts related to the All of Us dataset v8 normalization and annoataions for exome datasets chromosomes 1-22. All steps are performed on the All of Us Analysis Workbench: https://workbench.researchallofus.org/ 
 
 ## Order of operations for file usage
 1. Normalization
