@@ -52,3 +52,51 @@ Merged and compressed vcf files used to run in VEP are here
 ## Build the Docker Container and push the Image
 
 To simplify the process we built a docker container that had samtools included and the other dependencies to run a dsub job in the virtual machine environment since the run times are taking awhile. This will help run things in the background more smoothly. If you ever need to build a container with bigwig file dependencies just copy and build the Dockerfile and push it to the gc google cloud. It will take the latest version of VEP and add everything else needed to run your command.
+
+## Biofilter VEP Plugin Resources (README)
+
+This section lists the exact files to stage for the VEP plugins we’re using in Biofilter, plus a minimal example command. Copy/paste friendly.
+
+✅ Plugins & Required Files
+LOFTEE (LoF plugin)
+File / Path	Notes
+${PLUGIN_DIR}/loftee/	LOFTEE plugin directory (from VEP_plugins)
+${HUMAN_ANCESTOR_FILE} e.g. human_ancestor.fa.gz	Human ancestor FASTA
+${HUMAN_ANCESTOR_INDEX} e.g. human_ancestor.fa.gz.fai	FASTA index (samtools faidx)
+${CONSERVATION_FILE}	LOFTEE conservation reference (per LOFTEE bundle)
+${GERP_FILE_PATH}	GERP++ BigWig for conservation
+
+Notes: Plugin name is LoF in VEP; you pass paths via loftee_path:, human_ancestor_fa:, etc.
+
+CADD
+File / Path	Notes
+${PLUGIN_DIR}/CADD/whole_genome_SNVs_inclAnno.tsv.gz	SNV scores
+${PLUGIN_DIR}/CADD/whole_genome_SNVs_inclAnno.tsv.gz.tbi	Tabix index
+${PLUGIN_DIR}/CADD/whole_genome_InDels_inclAnno.tsv.gz	Indel scores
+${PLUGIN_DIR}/CADD/whole_genome_InDels_inclAnno.tsv.gz.tbi	Tabix index
+dbNSFP
+File / Path	Notes
+${PLUGIN_DIR}/dbNSFP/dbNSFP4.9a_grch38.gz	Main db file (GRCh38)
+${PLUGIN_DIR}/dbNSFP/dbNSFP4.9a_grch38.gz.tbi	Tabix index
+
+Tip: You can request specific fields (e.g., Ensembl_transcriptid,Uniprot_acc,VEP_canonical,LRT_pred,SIFT_pred,MutationTaster_pred,Polyphen2_HDIV_pred,Polyphen2_HVAR_pred,REVEL_score).
+
+SpliceAI
+File / Path	Notes
+${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.snv.hg38.vcf.gz	SNV predictions
+${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.snv.hg38.vcf.gz.tbi	Index
+${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.indel.hg38.vcf.gz	Indel predictions
+${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.indel.hg38.vcf.gz.tbi	Index
+AlphaMissense
+File / Path	Notes
+${PLUGIN_DIR}/AlphaMissense/AlphaMissense_hg38.tsv.gz	Precomputed scores (GRCh38)
+${PLUGIN_DIR}/AlphaMissense/AlphaMissense_hg38.tsv.gz.tbi	Tabix index (tabix -s 1 -b 2 -e 2)
+
+Notes: Plugin name is AlphaMissense; pass the score table via file= (see example below).
+
+Reference / Cache (shared)
+File / Path	Notes
+${EXTRACTED_CACHE_DIR}	VEP cache directory (offline mode)
+${PLUGIN_DIR}/Homo_sapiens_assembly38.fasta	Reference FASTA
+${PLUGIN_DIR}/Homo_sapiens_assembly38.fasta.fai	FASTA index (samtools faidx)
+${PLUGIN_DIR}	Root plugin directory for --dir_plugins
