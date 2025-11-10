@@ -55,48 +55,114 @@ To simplify the process we built a docker container that had samtools included a
 
 ## Biofilter VEP Plugin Resources (README)
 
-This section lists the exact files to stage for the VEP plugins we’re using in Biofilter, plus a minimal example command. Copy/paste friendly.
+# Biofilter VEP Plugin Resources
 
-✅ Plugins & Required Files
-LOFTEE (LoF plugin)
-File / Path	Notes
-${PLUGIN_DIR}/loftee/	LOFTEE plugin directory (from VEP_plugins)
-${HUMAN_ANCESTOR_FILE} e.g. human_ancestor.fa.gz	Human ancestor FASTA
-${HUMAN_ANCESTOR_INDEX} e.g. human_ancestor.fa.gz.fai	FASTA index (samtools faidx)
-${CONSERVATION_FILE}	LOFTEE conservation reference (per LOFTEE bundle)
-${GERP_FILE_PATH}	GERP++ BigWig for conservation
+Repository section for the **VEP plugin setup** used to modernize Biofilter with updated annotation methods:  
+**LOFTEE**, **CADD**, **dbNSFP**, **SpliceAI**, and **AlphaMissense**.  
 
-Notes: Plugin name is LoF in VEP; you pass paths via loftee_path:, human_ancestor_fa:, etc.
+These plugins provide AI- and evidence-based functional annotations for coding, splicing, and regulatory variants.
 
-CADD
-File / Path	Notes
-${PLUGIN_DIR}/CADD/whole_genome_SNVs_inclAnno.tsv.gz	SNV scores
-${PLUGIN_DIR}/CADD/whole_genome_SNVs_inclAnno.tsv.gz.tbi	Tabix index
-${PLUGIN_DIR}/CADD/whole_genome_InDels_inclAnno.tsv.gz	Indel scores
-${PLUGIN_DIR}/CADD/whole_genome_InDels_inclAnno.tsv.gz.tbi	Tabix index
-dbNSFP
-File / Path	Notes
-${PLUGIN_DIR}/dbNSFP/dbNSFP4.9a_grch38.gz	Main db file (GRCh38)
-${PLUGIN_DIR}/dbNSFP/dbNSFP4.9a_grch38.gz.tbi	Tabix index
+All plugins except **LOFTEE** can be installed via the Ensembl VEP plugin manager:  
+🔗 [https://useast.ensembl.org/info/docs/tools/vep/script/vep_plugins.html](https://useast.ensembl.org/info/docs/tools/vep/script/vep_plugins.html)
 
-Tip: You can request specific fields (e.g., Ensembl_transcriptid,Uniprot_acc,VEP_canonical,LRT_pred,SIFT_pred,MutationTaster_pred,Polyphen2_HDIV_pred,Polyphen2_HVAR_pred,REVEL_score).
+LOFTEE (Loss-Of-Function Transcript Effect Estimator) is a third-party plugin with required files here:  
+🔗 [https://github.com/konradjk/loftee/tree/grch38](https://github.com/konradjk/loftee/tree/grch38)
 
-SpliceAI
-File / Path	Notes
-${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.snv.hg38.vcf.gz	SNV predictions
-${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.snv.hg38.vcf.gz.tbi	Index
-${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.indel.hg38.vcf.gz	Indel predictions
-${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.indel.hg38.vcf.gz.tbi	Index
-AlphaMissense
-File / Path	Notes
-${PLUGIN_DIR}/AlphaMissense/AlphaMissense_hg38.tsv.gz	Precomputed scores (GRCh38)
-${PLUGIN_DIR}/AlphaMissense/AlphaMissense_hg38.tsv.gz.tbi	Tabix index (tabix -s 1 -b 2 -e 2)
+---
 
-Notes: Plugin name is AlphaMissense; pass the score table via file= (see example below).
+## ✅ Required Plugin Files
 
-Reference / Cache (shared)
-File / Path	Notes
-${EXTRACTED_CACHE_DIR}	VEP cache directory (offline mode)
-${PLUGIN_DIR}/Homo_sapiens_assembly38.fasta	Reference FASTA
-${PLUGIN_DIR}/Homo_sapiens_assembly38.fasta.fai	FASTA index (samtools faidx)
-${PLUGIN_DIR}	Root plugin directory for --dir_plugins
+### 🧩 LOFTEE (LoF plugin)
+
+| File / Path | Description |
+|--------------|-------------|
+| `${PLUGIN_DIR}/loftee/` | LOFTEE plugin directory (from VEP_plugins) |
+| `${HUMAN_ANCESTOR_FILE}` → `human_ancestor.fa.gz` | Human ancestor FASTA |
+| `${HUMAN_ANCESTOR_INDEX}` → `human_ancestor.fa.gz.fai` | FASTA index |
+| `${CONSERVATION_FILE}` | LOFTEE conservation reference |
+| `${GERP_FILE_PATH}` | GERP++ BigWig file for conservation |
+
+> **Note:** Use the plugin name `LoF` and specify these files via `loftee_path:`, `human_ancestor_fa:`, etc.
+
+---
+
+### ⚙️ CADD
+
+| File / Path | Description |
+|--------------|-------------|
+| `${PLUGIN_DIR}/CADD/whole_genome_SNVs_inclAnno.tsv.gz` | SNV CADD scores |
+| `${PLUGIN_DIR}/CADD/whole_genome_SNVs_inclAnno.tsv.gz.tbi` | Tabix index for SNVs |
+| `${PLUGIN_DIR}/CADD/whole_genome_InDels_inclAnno.tsv.gz` | Indel CADD scores |
+| `${PLUGIN_DIR}/CADD/whole_genome_InDels_inclAnno.tsv.gz.tbi` | Tabix index for Indels |
+
+---
+
+### 🧬 dbNSFP
+
+| File / Path | Description |
+|--------------|-------------|
+| `${PLUGIN_DIR}/dbNSFP/dbNSFP4.9a_grch38.gz` | dbNSFP variant prediction database (GRCh38) |
+| `${PLUGIN_DIR}/dbNSFP/dbNSFP4.9a_grch38.gz.tbi` | Tabix index for dbNSFP |
+
+**Example fields:**  
+`Ensembl_transcriptid, Uniprot_acc, VEP_canonical, LRT_pred, SIFT_pred, MutationTaster_pred, Polyphen2_HDIV_pred, Polyphen2_HVAR_pred, REVEL_score`
+
+---
+
+### 🧠 SpliceAI
+
+| File / Path | Description |
+|--------------|-------------|
+| `${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.snv.hg38.vcf.gz` | Precomputed SNV splice predictions |
+| `${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.snv.hg38.vcf.gz.tbi` | Tabix index for SNV file |
+| `${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.indel.hg38.vcf.gz` | Precomputed Indel splice predictions |
+| `${PLUGIN_DIR}/SpliceAI/spliceai_scores.raw.indel.hg38.vcf.gz.tbi` | Tabix index for Indel file |
+
+---
+
+### 🧠 AlphaMissense
+
+| File / Path | Description |
+|--------------|-------------|
+| `${PLUGIN_DIR}/AlphaMissense/AlphaMissense_hg38.tsv.gz` | AlphaMissense precomputed pathogenicity scores |
+| `${PLUGIN_DIR}/AlphaMissense/AlphaMissense_hg38.tsv.gz.tbi` | Tabix index (`tabix -s 1 -b 2 -e 2`) |
+
+> **Note:** Plugin name is `AlphaMissense`; specify via  
+> `file=${PLUGIN_DIR}/AlphaMissense/AlphaMissense_hg38.tsv.gz`
+
+---
+
+### 📚 Reference & Cache Files
+
+| File / Path | Description |
+|--------------|-------------|
+| `${EXTRACTED_CACHE_DIR}` | VEP cache directory (offline mode) |
+| `${PLUGIN_DIR}/Homo_sapiens_assembly38.fasta` | Reference FASTA (GRCh38) |
+| `${PLUGIN_DIR}/Homo_sapiens_assembly38.fasta.fai` | FASTA index |
+| `${PLUGIN_DIR}` | Plugin directory specified with `--dir_plugins` |
+
+---
+
+## 📁 Example Directory Layout
+
+```bash
+${PLUGIN_DIR}/
+  loftee/
+  CADD/
+    whole_genome_SNVs_inclAnno.tsv.gz
+    whole_genome_SNVs_inclAnno.tsv.gz.tbi
+    whole_genome_InDels_inclAnno.tsv.gz
+    whole_genome_InDels_inclAnno.tsv.gz.tbi
+  dbNSFP/
+    dbNSFP4.9a_grch38.gz
+    dbNSFP4.9a_grch38.gz.tbi
+  SpliceAI/
+    spliceai_scores.raw.snv.hg38.vcf.gz
+    spliceai_scores.raw.snv.hg38.vcf.gz.tbi
+    spliceai_scores.raw.indel.hg38.vcf.gz
+    spliceai_scores.raw.indel.hg38.vcf.gz.tbi
+  AlphaMissense/
+    AlphaMissense_hg38.tsv.gz
+    AlphaMissense_hg38.tsv.gz.tbi
+  Homo_sapiens_assembly38.fasta
+  Homo_sapiens_assembly38.fasta.fai
